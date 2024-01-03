@@ -42,7 +42,27 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    void addMidiMessage (const juce::MidiMessage& message)
+    {
+        juce::ScopedLock lock (midiBufferCriticalSection);
+        incomingMidi.addEvent (message, 0);
+    }
+
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OotbAudioProcessor)
+
+    juce::CriticalSection midiBufferCriticalSection;
+    juce::MidiBuffer incomingMidi;
+
+    void prepareMidiMessage (juce::MidiBuffer& midiBuffer)
+    {
+        if (incomingMidi.data.size() > 0)
+        {
+            std::cout << "prepare midi message..." << std::endl;
+
+            juce::ScopedLock lock (midiBufferCriticalSection);
+            midiBuffer.swapWith (incomingMidi);
+        }
+    }
 };
