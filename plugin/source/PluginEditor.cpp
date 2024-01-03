@@ -78,7 +78,7 @@ void OotbAudioProcessorEditor::buttonClicked(juce::Button *button) {
         if (midiOut)
         {
             // Add the message to a MidiBuffer
-            this->processorRef.addMidiMessage(message);
+            midiOut->sendMessageNow(message);
         }
 
         auto includeDate = true;

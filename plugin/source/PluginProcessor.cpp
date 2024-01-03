@@ -124,8 +124,6 @@ bool OotbAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) con
 void OotbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
                                        juce::MidiBuffer& midiMessages)
 {
-    this->prepareMidiMessage(midiMessages);
-
     juce::ignoreUnused (midiMessages);
 
     juce::ScopedNoDenormals noDenormals;
