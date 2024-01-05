@@ -7,7 +7,7 @@ struct DataParameters {
 };
 
 // Define a derived struct for a specific type of data parameters
-struct DataParametersType1 : DataParameters {
+struct RequestDataParameters : DataParameters {
     uint8_t paramPanelMode = 0x01;
 
     [[nodiscard]] std::vector<uint8_t> toVector() const override {
@@ -20,8 +20,12 @@ struct SysExData {
     uint8_t manufacturerId = 0x41;
     uint8_t deviceId = 0x10;
     uint8_t modelId = 0x46;
-    uint8_t commandId = 0x12;
+//    uint8_t commandId = 0x12;
+    uint8_t commandId = 0x11;
     uint8_t address[4] = {0x00, 0x00, 0x00, 0x00}; // This is always four bytes
+
+    uint8_t filler[3] = {0x00, 0x00, 0x00};
+
     DataParameters* data = nullptr; // This can be of any length
 
     [[nodiscard]] uint8_t calculateChecksum() const {

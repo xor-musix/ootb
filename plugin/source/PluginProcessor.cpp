@@ -151,6 +151,40 @@ void OotbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
         juce::ignoreUnused (channelData);
         // ..do something to the data...
     }
+
+    if (midiMessages.data.size() > 0)
+    {
+        std::cout << "midi messages IN size: " << midiMessages.data.size() << std::endl;
+    }
+
+    // Iterate over incoming MIDI messages
+    juce::MidiBuffer processedMidi;
+    for (const auto metadata : midiMessages)
+    {
+        auto message = metadata.getMessage();
+        if (message.isSysEx())
+        {
+            // Handle SysEx message
+            handleIncomingMidiMessage(message);
+        }
+        else
+        {
+            // Pass non-SysEx messages through
+            processedMidi.addEvent(message, metadata.samplePosition);
+            std::cout << "pass non-sysex message through: " << message.getDescription() << std::endl;
+        }
+    }
+
+    // Swap MIDI buffers
+    midiMessages.clear();
+    midiMessages.swapWith(processedMidi);
+
+    this->swapWithMidiMessageFromEditor(midiMessages);
+
+    if (midiMessages.data.size() > 0)
+    {
+        std::cout << "midi messages OUT size: " << midiMessages.data.size() << std::endl;
+    }
 }
 
 //==============================================================================
@@ -178,6 +212,10 @@ void OotbAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
     juce::ignoreUnused (data, sizeInBytes);
+}
+
+void OotbAudioProcessor::handleIncomingMidiMessage(juce::MidiMessage message) {
+    std::cout << "handle incoming midi message: " << message.getDescription() << std::endl;
 }
 
 //==============================================================================

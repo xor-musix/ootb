@@ -1,7 +1,7 @@
-#include <juce_audio_devices/juce_audio_devices.h>
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "MidiStructure.h"
+#include "SysexMidiInputCallback.h"
 
 //==============================================================================
 OotbAudioProcessorEditor::OotbAudioProcessorEditor(OotbAudioProcessor &p)
@@ -48,38 +48,56 @@ void OotbAudioProcessorEditor::buttonClicked(juce::Button *button) {
         auto currentTime = juce::Time::getCurrentTime();
 
         SysExData sysexData;
-        DataParametersType1 dataParametersType1;
+        RequestDataParameters dataParametersType1;
         sysexData.data = &dataParametersType1;
         uint8_t checksum = sysexData.calculateChecksum();
-        std::cout << "sending sysex midi message with checksum of '0x" << std::setfill('0') << std::setw(2) << std::hex << static_cast<int>(checksum) << "'" << std::endl;
+        std::cout << "sending sysex midi message with checksum of '0x" << std::setfill('0') << std::setw(2) << std::hex
+                  << static_cast<int>(checksum) << "'" << std::endl;
 
         std::vector<uint8_t> sysexDataVector;
         std::vector<uint8_t> dataVector = sysexData.data->toVector();
         sysexDataVector = {sysexData.manufacturerId, sysexData.deviceId, sysexData.modelId, sysexData.commandId};
         sysexDataVector.insert(sysexDataVector.end(), std::begin(sysexData.address), std::end(sysexData.address));
+        sysexDataVector.insert(sysexDataVector.end(), std::begin(sysexData.filler), std::end(sysexData.filler));
         sysexDataVector.insert(sysexDataVector.end(), std::begin(dataVector), std::end(dataVector));
         sysexDataVector.push_back(checksum);
 
         juce::MidiMessage message;
         message = juce::MidiMessage::createSysExMessage(sysexDataVector.data(), sysexDataVector.size());
 
-        // Get the first available MIDI output device
-//        juce::Array<juce::MidiDeviceInfo> availableDevices;
-//        availableDevices = juce::MidiOutput::getAvailableDevices();
-//
-//        for (auto& device : availableDevices) {
-//            std::cout << device.name + ":" + device.identifier << std::endl;
+        juce::Array<juce::MidiDeviceInfo> availableDevices;
+
+        std::string deviceIdentifier = "24-0";
+
+//        std::unique_ptr<juce::MidiInput> midiIn;
+//        SysexMidiInputCallback midiInCallback;
+//        availableDevices = juce::MidiInput::getAvailableDevices();
+//        for (auto &device: availableDevices) {
+//            if (device.identifier.compare(deviceIdentifier) == 0) {
+//                midiIn = juce::MidiInput::openDevice(deviceIdentifier, &midiInCallback);
+//                std::cout << "MIDI input device '" + device.name + "' identifier '" + device.identifier + "'"
+//                          << std::endl;
+//            }
+//        }
+//        if (midiIn) {
+//            midiIn->start();
 //        }
 
-        std::string deviceName = "24-0";
-        std::unique_ptr<juce::MidiOutput> midiOut;
-        midiOut = juce::MidiOutput::openDevice(deviceName);
-
-        if (midiOut)
-        {
-            // Add the message to a MidiBuffer
-            midiOut->sendMessageNow(message);
-        }
+//        // Get the first available MIDI output device
+//        availableDevices = juce::MidiOutput::getAvailableDevices();
+//
+//        std::unique_ptr<juce::MidiOutput> midiOut = nullptr;
+//        for (auto &device: availableDevices) {
+//            if (device.identifier.compare(deviceIdentifier) == 0) {
+//                midiOut = juce::MidiOutput::openDevice(deviceIdentifier);
+//                std::cout << "MIDI output device '" + device.name + "' identifier '" + device.identifier + "'"
+//                          << std::endl;
+//            }
+//        }
+//        if (midiOut) {
+////            midiOut->sendMessageNow(message);
+            this->processorRef.addMidiMessage(message);
+//        }
 
         auto includeDate = true;
         auto includeTime = true;

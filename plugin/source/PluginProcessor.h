@@ -44,8 +44,10 @@ public:
 
     void addMidiMessage (const juce::MidiMessage& message)
     {
+        std::cout << "add midi message: " << message.getDescription() << std::endl;
+
         juce::ScopedLock lock (midiBufferCriticalSection);
-        incomingMidi.addEvent (message, 0);
+        midiMessageFromEditor.addEvent (message, 0);
     }
 
 private:
@@ -53,16 +55,18 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OotbAudioProcessor)
 
     juce::CriticalSection midiBufferCriticalSection;
-    juce::MidiBuffer incomingMidi;
+    juce::MidiBuffer midiMessageFromEditor;
 
-    void prepareMidiMessage (juce::MidiBuffer& midiBuffer)
+    void swapWithMidiMessageFromEditor (juce::MidiBuffer& midiBuffer)
     {
-        if (incomingMidi.data.size() > 0)
+        if (midiMessageFromEditor.data.size() > 0)
         {
-            std::cout << "prepare midi message..." << std::endl;
+            std::cout << "prepare midi message: " << midiMessageFromEditor.data.size() << std::endl;
 
             juce::ScopedLock lock (midiBufferCriticalSection);
-            midiBuffer.swapWith (incomingMidi);
+            midiBuffer.swapWith (midiMessageFromEditor);
         }
     }
+
+    static void handleIncomingMidiMessage(juce::MidiMessage message);
 };
