@@ -42,13 +42,7 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    void addMidiMessage (const juce::MidiMessage& message)
-    {
-        std::cout << "add midi message: " << message.getDescription() << std::endl;
-
-        juce::ScopedLock lock (midiBufferCriticalSection);
-        midiMessageFromEditor.addEvent (message, 0);
-    }
+    void addMidiMessage (const juce::MidiMessage& message);
 
 private:
     //==============================================================================
@@ -57,16 +51,7 @@ private:
     juce::CriticalSection midiBufferCriticalSection;
     juce::MidiBuffer midiMessageFromEditor;
 
-    void swapWithMidiMessageFromEditor (juce::MidiBuffer& midiBuffer)
-    {
-        if (midiMessageFromEditor.data.size() > 0)
-        {
-            std::cout << "prepare midi message: " << midiMessageFromEditor.data.size() << std::endl;
-
-            juce::ScopedLock lock (midiBufferCriticalSection);
-            midiBuffer.swapWith (midiMessageFromEditor);
-        }
-    }
+    void swapWithMidiMessageFromEditor (juce::MidiBuffer& midiBuffer);
 
     static void handleIncomingMidiMessage(juce::MidiMessage message);
 };

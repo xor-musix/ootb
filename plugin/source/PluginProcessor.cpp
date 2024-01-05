@@ -218,6 +218,23 @@ void OotbAudioProcessor::handleIncomingMidiMessage(juce::MidiMessage message) {
     std::cout << "handle incoming midi message: " << message.getDescription() << std::endl;
 }
 
+void OotbAudioProcessor::addMidiMessage(const juce::MidiMessage &message) {
+    std::cout << "add midi message: " << message.getDescription() << std::endl;
+
+    juce::ScopedLock lock (midiBufferCriticalSection);
+    midiMessageFromEditor.addEvent (message, 0);
+}
+
+void OotbAudioProcessor::swapWithMidiMessageFromEditor(juce::MidiBuffer &midiBuffer) {
+    if (midiMessageFromEditor.data.size() > 0)
+    {
+        std::cout << "prepare midi message: " << midiMessageFromEditor.data.size() << std::endl;
+
+        juce::ScopedLock lock (midiBufferCriticalSection);
+        midiBuffer.swapWith (midiMessageFromEditor);
+    }
+}
+
 //==============================================================================
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
