@@ -47,23 +47,13 @@ void OotbAudioProcessorEditor::buttonClicked(juce::Button *button) {
     if (button == &invokeSysExButton) {
         auto currentTime = juce::Time::getCurrentTime();
 
-        SysExData sysexData;
-        RequestDataParameters dataParametersType1;
-        sysexData.data = &dataParametersType1;
-        uint8_t checksum = sysexData.calculateChecksum();
-        std::cout << "sending sysex midi message with checksum of '0x" << std::setfill('0') << std::setw(2) << std::hex
-                  << static_cast<int>(checksum) << "'" << std::endl;
+        SysExRequestPanelMode sysExRequestPanelMode;
 
         std::vector<uint8_t> sysexDataVector;
-        std::vector<uint8_t> dataVector = sysexData.data->toVector();
-        sysexDataVector = {sysexData.manufacturerId, sysexData.deviceId, sysexData.modelId, sysexData.commandId};
-        sysexDataVector.insert(sysexDataVector.end(), std::begin(sysexData.address), std::end(sysexData.address));
-        sysexDataVector.insert(sysexDataVector.end(), std::begin(sysexData.filler), std::end(sysexData.filler));
-        sysexDataVector.insert(sysexDataVector.end(), std::begin(dataVector), std::end(dataVector));
-        sysexDataVector.push_back(checksum);
+        sysexDataVector = sysExRequestPanelMode.toVector();
 
-        juce::MidiMessage message;
-        message = juce::MidiMessage::createSysExMessage(sysexDataVector.data(), sysexDataVector.size());
+        juce::MidiMessage message = juce::MidiMessage(sysexDataVector.data(), sysexDataVector.size());
+//        message = juce::MidiMessage::createSysExMessage(sysexDataVector.data(), sysexDataVector.size());
 
         juce::Array<juce::MidiDeviceInfo> availableDevices;
 
