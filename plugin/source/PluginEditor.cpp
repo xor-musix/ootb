@@ -47,13 +47,11 @@ void OotbAudioProcessorEditor::buttonClicked(juce::Button *button) {
     if (button == &invokeSysExButton) {
         auto currentTime = juce::Time::getCurrentTime();
 
-        SysExRequestPanelMode sysExRequestPanelMode;
+        RolandJv880RequestPanelMode requestPanelMode;
 
-        std::vector<uint8_t> sysexDataVector;
-        sysexDataVector = sysExRequestPanelMode.toVector();
+        std::vector<uint8_t> sysExData = requestPanelMode.toSysExData();
 
-        juce::MidiMessage message = juce::MidiMessage(sysexDataVector.data(), sysexDataVector.size());
-//        message = juce::MidiMessage::createSysExMessage(sysexDataVector.data(), sysexDataVector.size());
+        juce::MidiMessage message = juce::MidiMessage(sysExData.data(), sysExData.size());
 
         juce::Array<juce::MidiDeviceInfo> availableDevices;
 
