@@ -1,6 +1,7 @@
 #pragma once
 
 #include <juce_audio_processors/juce_audio_processors.h>
+#include "MidiParameters.h"
 
 //==============================================================================
 class OotbAudioProcessor final : public juce::AudioProcessor
@@ -47,6 +48,8 @@ public:
 private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (OotbAudioProcessor)
+
+    MidiParameters midiParameters;
 
     juce::CriticalSection midiBufferCriticalSection;
     juce::MidiBuffer midiMessageFromEditor;

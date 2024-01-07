@@ -1,0 +1,26 @@
+<parameters id="rolandJv880" name="Roland JV-880" description="Roland JV-880 Multi Timbral Synthesizer Module"
+            manufacturerId="0x41" modelId="0x46" defaultDeviceId="0x10">
+    <parameterGroup id="systemCommon" name="System Common" description="In the System Edit mode, the System Common parameters those related to the entire unit (such as master tuning) can be edited.">
+        <parameter id="masterTune" name="Master Tune" description="This parameter controls the overall tuning (pitch) of the JV-880. The value is expressed as the frequency of the A4 key. The greater the value, the higher the pitch."
+                   address="0x00,0x00,0x00,0x01"
+                   type="Number"
+                   valueMin="1" valueMax="127" stepRate="1"
+                   valueMinLabel="427.4" valueMaxLabel="452.6" stepRateLabel=".2"
+                   value="64"/>
+        <parameter name="parameter2" description="Patch Parameter"
+                   address="0x00,0x00,0x00,0x02"
+                   type="Text"
+                   value="Hello"/>
+    </parameterGroup>
+    <parameterGroup name="tone" description="Tone Parameter">
+        <parameter name="parameter1" description="Tone Parameter"
+                   address="0x00,0x00,0x00,0x03"
+                   type="Number"
+                   valueMin="0" valueMax="127" stepRate="1"
+                   value="64"/>
+        <parameter name="parameter2" description="Tone Parameter"
+                   address="0x00,0x00,0x00,0x04"
+                   type="Text"
+                   value="Hello"/>
+    </parameterGroup>
+</parameters>

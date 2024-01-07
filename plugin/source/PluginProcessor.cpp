@@ -1,5 +1,6 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "MidiParameters.h"
 
 //==============================================================================
 OotbAudioProcessor::OotbAudioProcessor()
@@ -10,7 +11,7 @@ OotbAudioProcessor::OotbAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), midiParameters("/home/mnemonic/Data/repos/xor-musix/ootb/plugin/config/RolandJV880.def.xml")
 {
 }
 

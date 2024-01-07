@@ -47,6 +47,8 @@ target_sources(OOTB
         PluginEditor.cpp
         PluginProcessor.cpp
         MidiStructure.h
+        MidiParameters.cpp
+        MidiParameters.h
         SysexMidiInputCallback.cpp
         SysexMidiInputCallback.h)
 
