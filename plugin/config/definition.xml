@@ -1,0 +1,21 @@
+<!--<root>-->
+<!--    <part id="1">-->
+<!--        <note id="C" offsetAddress="0x24"/>-->
+<!--        <note id="C#" offsetAddress="0x25"/>-->
+<!--        <note id="D" offsetAddress="0x26"/>-->
+<!--        <note id="D#" offsetAddress="0x27"/>-->
+<!--        <note id="E" offsetAddress="0x28"/>-->
+<!--        <note id="F" offsetAddress="0x29"/>-->
+<!--        <note id="F#" offsetAddress="0x2A"/>-->
+<!--        <note id="G" offsetAddress="0x2B"/>-->
+<!--        <note id="G#" offsetAddress="0x2C"/>-->
+<!--        <note id="A" offsetAddress="0x2D"/>-->
+<!--        <note id="A#" offsetAddress="0x2E"/>-->
+<!--        <note id="B" offsetAddress="0x2F"/>-->
+<!--    </part>-->
+<!--</root>-->
+
+<root>
+    <notes>C,C#,D,D#,E,F,F#,G,G#,A,A#,B</notes>
+    <parts>1,2,3,4,5,6,7,8</parts>
+</root>

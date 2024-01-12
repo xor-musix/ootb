@@ -1,9 +1,9 @@
 <parameters id="rolandJv880" name="Roland JV-880" description="Roland JV-880 Multi Timbral Synthesizer Module"
             manufacturerId="0x41" modelId="0x46" defaultDeviceId="0x10">
-    <parameterGroup id="systemCommon" name="System Common"
-                    description="In the System Edit mode, the System Common parameters those related to the entire unit (such as master tuning) can be edited.">
+    <parameterGroup id="systemCommon" name="System Common" description="In the System Edit mode, the System Common parameters those related to the entire unit (such as master tuning) can be edited."
+                    startAddress="0x00,0x00,0x00,0x00">
         <parameter id="panelMode" name="Panel Mode" description="Switch between performance and patch mode."
-                   address="0x00,0x00,0x00,0x00"
+                   offsetAddress="0x00"
                    type="Boolean"
                    valueSet="0,1"
                    valueRange="0-1" stepRate="1"
@@ -11,9 +11,8 @@
                    valueRangeMinLabel="Performance" valueRangeMaxLabel="Patch"
                    valueDefault="0"
                    valueCurrent="0"/>
-        <parameter id="masterTune" name="Master Tune"
-                   description="This parameter controls the overall tuning (pitch) of the JV-880. The value is expressed as the frequency of the A4 key. The greater the value, the higher the pitch."
-                   address="0x00,0x00,0x00,0x01"
+        <parameter id="masterTune" name="Master Tune" description="This parameter controls the overall tuning (pitch) of the JV-880. The value is expressed as the frequency of the A4 key. The greater the value, the higher the pitch."
+                   offsetAddress="0x01"
                    type="Number"
                    valueRange="1-127" stepRate="1"
                    valueRangeMin="1" valueRangeMax="127" valueStepRate="1"
@@ -21,11 +20,11 @@
                    valueDefault="63"
                    valueCurrent="64"/>
         <parameter id="keyTranspose" name="Key Transpose"
-                   address="0x00,0x00,0x00,0x02" valid="False"/>
+                   offsetAddress="0x02" valid="False"/>
         <parameter id="transposeSwitch" name="Transpose Switch"
-                   address="0x00,0x00,0x00,0x03" valid="False"/>
+                   offsetAddress="0x03" valid="False"/>
         <parameter id="reverbSwitch" name="Reverb Switch" description="Switch the reverb on or off."
-                   address="0x00,0x00,0x00,0x04"
+                   offsetAddress="0x04"
                    type="Boolean"
                    valueSet="0,1"
                    valueRange="0-1" stepRate="1"
@@ -34,7 +33,7 @@
                    valueDefault="0"
                    valueCurrent="0"/>
         <parameter id="chorusSwitch" name="Chorus Switch" description="Switch the chorus on or off."
-                   address="0x00,0x00,0x00,0x05"
+                   offsetAddress="0x05"
                    type="Boolean"
                    valueSet="0,1"
                    valueRange="0-1" stepRate="1"
@@ -43,35 +42,198 @@
                    valueDefault="0"
                    valueCurrent="0"/>
         <parameter id="holdPolarity" name="Hold Polarity"
-                   address="0x00,0x00,0x00,0x06" valid="False"/>
+                   offsetAddress="0x06" valid="False"/>
         <parameter id="pedal1Polarity" name="Pedal 1 Polarity"
-                   address="0x00,0x00,0x00,0x07" valid="False"/>
+                   offsetAddress="0x07" valid="False"/>
         <parameter id="pedal1Mode" name="Pedal 1 Mode"
-                   address="0x00,0x00,0x00,0x08" valid="False"/>
+                   offsetAddress="0x08" valid="False"/>
         <parameter id="pedal1Assign" name="Pedal 1 Assign"
-                   address="0x00,0x00,0x00,0x09" valid="False"/>
+                   offsetAddress="0x09" valid="False"/>
         <parameter id="pedal2Polarity" name="Pedal 2 Polarity"
-                   address="0x00,0x00,0x00,0x0A" valid="False"/>
+                   offsetAddress="0x0A" valid="False"/>
         <parameter id="pedal2Mode" name="Pedal 2 Mode"
-                   address="0x00,0x00,0x00,0x0B" valid="False"/>
+                   offsetAddress="0x0B" valid="False"/>
         <parameter id="pedal2Assign" name="Pedal 2 Assign"
-                   address="0x00,0x00,0x00,0x0C" valid="False"/>
+                   offsetAddress="0x0C" valid="False"/>
         <parameter id="c1Mode" name="C1 Mode"
-                   address="0x00,0x00,0x00,0x0D" valid="False"/>
+                   offsetAddress="0x0D" valid="False"/>
         <parameter id="c1Assign" name="C1 Assign"
-                   address="0x00,0x00,0x00,0x0E" valid="False"/>
+                   offsetAddress="0x0E" valid="False"/>
         <parameter id="aftertouchThreshold" name="Aftertouch Threshold"
-                   address="0x00,0x00,0x00,0x0F" valid="False"/>
-    </parameterGroup>
-    <parameterGroup name="tone" description="Tone Parameter">
-        <parameter name="parameter1" description="Tone Parameter"
-                   address="0x00,0x00,0x00,0x03"
+                   offsetAddress="0x0F" valid="False"/>
+        <parameter id="midiReceiveSwitchVolume" name="MIDI Receive Switch Volume" description="This parameter determines whether or not the JV-880 will respond to volume data from an external MIDI device: ON (respond)/OFF (ignore)" hint="The setting of the volume receive switch in the Patch Tone parameters and the setting of the volume receive switch in the Performance Part parameters have no effect when this switch is set to OFF."
+                   information="The actual sound level changes when MIDI volume data is received. However, the setting of the Performance's Part level and the setting of the Patch level do not change. Send the volume data again or re-select the mode in order to return to the original setting."
+                   offsetAddress="0x10"
+                   type="Boolean"
+                   valueSet="0,1"
+                   valueRange="0-1" stepRate="1"
+                   valueRangeMin="0" valueRangeMax="1" valueStepRate="1"
+                   valueRangeMinLabel="Off" valueRangeMaxLabel="On"
+                   valueDefault="0"
+                   valueCurrent="0"/>
+        <parameter id="midiReceiveSwitchControlChange" name="MIDI Receive Switch Control Change" description="This parameter determines whether or not the JV-880 responds to Control Change messages other than modulation, volume, bank select and RPN from an external MIDI device: ON (respond)/OFF (ignore)" information="" hint=""
+                   offsetAddress="0x11"
+                   type="Boolean"
+                   valueSet="0,1"
+                   valueRange="0-1" stepRate="1"
+                   valueRangeMin="0" valueRangeMax="1" valueStepRate="1"
+                   valueRangeMinLabel="Off" valueRangeMaxLabel="On"
+                   valueDefault="0"
+                   valueCurrent="0"/>
+        <parameter id="midiReceiveSwitchChannelPressure" name="MIDI Receive Switch Aftertouch" description="This parameter determines whether or not the JV-880 will respond to aftertouch data from an external MIDI device: ON (respond)/OFF (ignore)" information="" hint=""
+                   offsetAddress="0x12"
+                   type="Boolean"
+                   valueSet="0,1"
+                   valueRange="0-1" stepRate="1"
+                   valueRangeMin="0" valueRangeMax="1" valueStepRate="1"
+                   valueRangeMinLabel="Off" valueRangeMaxLabel="On"
+                   valueDefault="0"
+                   valueCurrent="0"/>
+        <parameter id="midiReceiveSwitchModulation" name="MIDI Receive Switch Modulation" description="This parameter determines whether or not the JV-880 will respond to modulation data from an external MIDI device: ON (respond)/OFF (ignore)" information="" hint=""
+                   offsetAddress="0x13"
+                   type="Boolean"
+                   valueSet="0,1"
+                   valueRange="0-1" stepRate="1"
+                   valueRangeMin="0" valueRangeMax="1" valueStepRate="1"
+                   valueRangeMinLabel="Off" valueRangeMaxLabel="On"
+                   valueDefault="0"
+                   valueCurrent="0"/>
+        <parameter id="midiReceiveSwitchPitchBend" name="MIDI Receive Switch Pitch Bend" description="This parameter determines whether or not the JV-880 will respond to pitch bend data from an external MIDI device: ON (respond)/OFF (ignore)" information="" hint=""
+                   offsetAddress="0x14"
+                   type="Boolean"
+                   valueSet="0,1"
+                   valueRange="0-1" stepRate="1"
+                   valueRangeMin="0" valueRangeMax="1" valueStepRate="1"
+                   valueRangeMinLabel="Off" valueRangeMaxLabel="On"
+                   valueDefault="0"
+                   valueCurrent="0"/>
+        <parameter id="midiReceiveSwitchProgramChange" name="MIDI Receive Switch Program Change" description="This parameter determines whether or not the JV-880 will respond to Program Change messages from an external MIDI device: ON (respond)/OFF (ignore)" information="Performances, Patches or Rhythm Sets may sometimes not change as expected if either the Program Change receiving switch or the bank select receiving switch has been set to OFF. The setting of the Program Change receiving switch in the Performance Part parameters has no effect when this switch is OFF." hint=""
+                   offsetAddress="0x15"
+                   type="Boolean"
+                   valueSet="0,1"
+                   valueRange="0-1" stepRate="1"
+                   valueRangeMin="0" valueRangeMax="1" valueStepRate="1"
+                   valueRangeMinLabel="Off" valueRangeMaxLabel="On"
+                   valueDefault="0"
+                   valueCurrent="0"/>
+        <parameter id="midiReceiveSwitchBankSelect" name="MIDI Receive Switch Bank Select" description="This parameter determines whether or not the JV-880 will respond to bank select (Control change No.O) messages from an external MIDI device: ON (respond)/OFF (ignore)" information="" hint=""
+                   offsetAddress="0x16"
+                   type="Boolean"
+                   valueSet="0,1"
+                   valueRange="0-1" stepRate="1"
+                   valueRangeMin="0" valueRangeMax="1" valueStepRate="1"
+                   valueRangeMinLabel="Off" valueRangeMaxLabel="On"
+                   valueDefault="0"
+                   valueCurrent="0"/>
+        <parameter id="midiTransmitSwitchVolume" name="MIDI Transmit Switch Volume"
+                   offsetAddress="0x17" valid="false"/>
+        <parameter id="midiTransmitSwitchControlChange" name="MIDI Transmit Switch Control Change"
+                   offsetAddress="0x18" valid="false"/>
+        <parameter id="midiTransmitSwitchChannelPressure" name="MIDI Transmit Switch Channel Pressure"
+                   offsetAddress="0x19" valid="false"/>
+        <parameter id="midiTransmitSwitchModulation" name="MIDI Transmit Switch Modulation"
+                   offsetAddress="0x1A" valid="false"/>
+        <parameter id="midiTransmitSwitchBender" name="MIDI Transmit Switch Bender"
+                   offsetAddress="0x1B" valid="false"/>
+        <parameter id="midiTransmitSwitchProgramChange" name="MIDI Transmit Switch Program Change"
+                   offsetAddress="0x1C" valid="false"/>
+        <parameter id="midiTransmitSwitchBankSelect" name="MIDI Transmit Switch Bank Select"
+                   offsetAddress="0x1D" valid="false"/>
+        <parameter id="patchReceiveChannel" name="Patch Receive Channel" description="This parameter determines the Patch receive channel. Patches can be changed (over the set channel) by reception of a bank select message and an appropriate Program Change message. When only a Program Change message is received, the Patches change only between presets A and B, or between internal memory and a Data Card." information="This parameter is only selected when the mode is changed from Patch Play/Edit to System Edit." hint=""
+                   offsetAddress="0x1E"
                    type="Number"
-                   valueRangeMin="0" valueRangeMax="127" stepRate="1"
-                   value="64"/>
-        <parameter name="parameter2" description="Tone Parameter"
-                   address="0x00,0x00,0x00,0x04"
-                   type="Text"
-                   value="Hello"/>
+                   valueRange="0-15" stepRate="1"
+                   valueRangeMin="0" valueRangeMax="15" valueStepRate="1"
+                   valueRangeMinLabel="1" valueRangeMaxLabel="16" valueStepRateLabel="1"
+                   valueDefault="0"
+                   valueCurrent="0"/>
+        <parameter id="patchTransmitChannel" name="Patch Transmit Channel"
+                   offsetAddress="0x1F" valid="false"/>
+        <parameter id="controlChannel" name="Control Channel" description="This parameter determines the Control channel. This parameter lets you change Performances by MIDI message, or sets the channel for turning the chorus/reverb switch on and off." information="This parameter is only selected when the mode is changed from Performance Play/Edit to System Edit." hint=""
+                   offsetAddress="0x20"
+                   type="Number"
+                   valueRange="0-16" stepRate="1"
+                   valueRangeMin="0" valueRangeMax="16" valueStepRate="1"
+                   valueRangeMinLabel="Off" valueRangeMaxLabel="16" valueStepRateLabel="1"
+                   valueDefault="0"
+                   valueCurrent="0"/>
+        <parameter id="outputMode" name="Output Mode" description="This parameter determines the jacks from which the sound will be output." information="When 4 OUT is selected, the VOLUME knob only controls the level of the MAIN OUTPUT jacks. The level of the SUB OUTPUT jacks is fixed." hint="'2 OUT: The stereo (L/R) signal with effects is output through the MAIN OUTPUT jacks.','4 OUT: Sounds without effects are output through both the MAIN OUTPUT and SUB OUTPUT jacks. The settings of the Output Select of each Patch and the Performance determine from which set of jacks, MAIN or SUB, the sound will be output.'"
+                   offsetAddress="0x21"
+                   type="Number"
+                   valueRange="0-1" stepRate="1"
+                   valueRangeMin="0" valueRangeMax="1" valueStepRate="1"
+                   valueRangeMinLabel="2 Out" valueRangeMaxLabel="4 Out"
+                   valueDefault="0"
+                   valueCurrent="0"/>
+        <parameter id="rhythmEditKey" name="Rhythm Edit Key" description="When editing, writing, copying or initializing each percussion sound in a Rhythm Set, the Rhythm Edit key determines whether the percussion sound can be selected by the operations of the JV-880, or by both the JV-880 and the keys of a connected MIDI keyboard." information="" hint="'INT &amp; MIDI: The sounds can be selected by both the DATA dial and a connected MIDI keyboard.','INT: The sounds can only be selected by the JV's DATA dial.'"
+                   offsetAddress="0x22"
+                   type="Number"
+                   valueRange="0-1" stepRate="1"
+                   valueRangeMin="0" valueRangeMax="1" valueStepRate="1"
+                   valueRangeMinLabel="Int &amp; MIDI" valueRangeMaxLabel="Int"
+                   valueDefault="0"
+                   valueCurrent="0"/>
+        <parameter id="scaleTuneSwitch" name="Scale Tune Switch" description="This parameter determines whether or not the Scale Tune function is applied (ON)." information="" hint=""
+                   offsetAddress="0x23"
+                   type="Number"
+                   valueRange="0-1" stepRate="1"
+                   valueRangeMin="0" valueRangeMax="1" valueStepRate="1"
+                   valueRangeMinLabel="Off" valueRangeMaxLabel="On"
+                   valueDefault="0"
+                   valueCurrent="0"/>
+        <parameter id="scaleTunePart1C" name="Scale Tune Part 1 C" description="The Scale Tune function allows you to precisely adjust the individual pitches of notes in an octave (C to B). Adjustments made here will apply to the entire keyboard. This function makes it possible to use tunings other than conventional equal temperament." information="-64 — +63 (in 1-cent units) for each note C — B" hint="'(+) value: The greater the value, the higher the pitch.','(-) value: The greater the value, the lower the pitch.'"
+                   offsetAddress="0x24"
+                   type="Number"
+                   valueRange="0-127" stepRate="1"
+                   valueRangeMin="0" valueRangeMax="127" valueStepRate="1"
+                   valueRangeMinLabel="-64" valueRangeMaxLabel="+63" valueStepRateLabel="1"
+                   valueDefault="64"
+                   valueCurrent="64"/>
+        <parameter id="scaleTunePart1C#" name="Scale Tune Part 1 C#" description="The Scale Tune function allows you to precisely adjust the individual pitches of notes in an octave (C to B). Adjustments made here will apply to the entire keyboard. This function makes it possible to use tunings other than conventional equal temperament." information="-64 — +63 (in 1-cent units) for each note C — B" hint="'(+) value: The greater the value, the higher the pitch.','(-) value: The greater the value, the lower the pitch.'"
+                   offsetAddress="0x25"
+                   type="Number"
+                   valueRange="0-127" stepRate="1"
+                   valueRangeMin="0" valueRangeMax="127" valueStepRate="1"
+                   valueRangeMinLabel="-64" valueRangeMaxLabel="+63" valueStepRateLabel="1"
+                   valueDefault="64"
+                   valueCurrent="64"/>
+        <parameter id="scaleTunePart1D" name="Scale Tune Part 1 D" description="The Scale Tune function allows you to precisely adjust the individual pitches of notes in an octave (C to B). Adjustments made here will apply to the entire keyboard. This function makes it possible to use tunings other than conventional equal temperament." information="-64 — +63 (in 1-cent units) for each note C — B" hint="'(+) value: The greater the value, the higher the pitch.','(-) value: The greater the value, the lower the pitch.'"
+                   offsetAddress="0x26"
+                   type="Number"
+                   valueRange="0-127" stepRate="1"
+                   valueRangeMin="0" valueRangeMax="127" valueStepRate="1"
+                   valueRangeMinLabel="-64" valueRangeMaxLabel="+63" valueStepRateLabel="1"
+                   valueDefault="64"
+                   valueCurrent="64"/>
+    </parameterGroup>
+    <parameterGroup id="temporaryPerformance" name="Temporary Performance" description="This area is used for temporarily storing Performance data called up from User memory (or Preset Memory A/B) The JV-880 is ultimately controlled by the data in the temporary area. As any editing of the data occurs in the temporary area only, the original data will not be affected."
+                    startAddress="0x00,0x00,0x10,0x00">
+    </parameterGroup>
+    <parameterGroup id="performanceModeTemporaryPatchPart1" name="Performance Mode Temporary Patch (Part1)" description=""
+                    startAddress="0x00,0x00,0x20,0x00">
+    </parameterGroup>
+    <parameterGroup id="performanceModeTemporaryPatchPart2" name="Performance Mode Temporary Patch (Part2)" description=""
+                    startAddress="0x00,0x10,0x20,0x00">
+    </parameterGroup>
+    <parameterGroup id="performanceModeTemporaryPatchPart3" name="Performance Mode Temporary Patch (Part3)" description=""
+                    startAddress="0x00,0x20,0x20,0x00">
+    </parameterGroup>
+    <parameterGroup id="performanceModeTemporaryPatchPart4" name="Performance Mode Temporary Patch (Part4)" description=""
+                    startAddress="0x00,0x30,0x20,0x00">
+    </parameterGroup>
+    <parameterGroup id="performanceModeTemporaryPatchPart5" name="Performance Mode Temporary Patch (Part5)" description=""
+                    startAddress="0x00,0x40,0x20,0x00">
+    </parameterGroup>
+    <parameterGroup id="performanceModeTemporaryPatchPart6" name="Performance Mode Temporary Patch (Part6)" description=""
+                    startAddress="0x00,0x50,0x20,0x00">
+    </parameterGroup>
+    <parameterGroup id="performanceModeTemporaryPatchPart7" name="Performance Mode Temporary Patch (Part7)" description=""
+                    startAddress="0x00,0x60,0x20,0x00">
+    </parameterGroup>
+    <parameterGroup id="temporaryRhythmSetup" name="Temporary Rhythm Setup" description=""
+                    startAddress="0x00,0x70,0x40,0x00">
+    </parameterGroup>
+    <parameterGroup id="patchModeTemporaryPatch" name="Patch Mode Temporary Patch" description=""
+                    startAddress="0x00,0x80,0x20,0x00">
     </parameterGroup>
 </parameters>

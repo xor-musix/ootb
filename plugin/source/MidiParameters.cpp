@@ -22,26 +22,49 @@ MidiParameters::MidiParameters(const char *definitionFile) {
     // Convert XML to ValueTree
     ValueTree synthParameters = ValueTree::fromXml(*xml);
 
+    traverseValueTree(synthParameters);
+
     // Create lookup table by address
     std::unordered_map<String, ValueTree> lookupByAddress;
-    for (int i = 0; i < synthParameters.getNumChildren(); ++i) {
-        ValueTree child = synthParameters.getChild(i);
-        String address = child.getProperty("address");
-        lookupByAddress[address] = child;
-    }
+//    for (int i = 0; i < synthParameters.getNumChildren(); ++i) {
+//        ValueTree child = synthParameters.getChild(i);
+//        String address = child.getProperty("address");
+//        lookupByAddress[address] = child;
+//    }
 
     // Now you can look up parameters by address and modify them directly
     // For example:
-    ValueTree& parameterByAddress = lookupByAddress["0x00,0x00,0x00,0x01"];
-    std::cout << "Parameter with address 0x00,0x00,0x00,0x01: " << parameterByAddress.getProperty("name").toString() << std::endl;
-
-    // Modify it directly
-    parameterByAddress.setProperty("name", "modifiedParameter1", nullptr);
-    std::cout << "Modified parameter name: " << parameterByAddress.getProperty("name").toString() << std::endl;
-
-    ValueTree modifiedParameter = lookupByAddress["0x00,0x00,0x00,0x01"];
-    std::cout << "new valuetree get Modified parameter name: " << parameterByAddress.getProperty("name").toString() << std::endl;
+//    ValueTree &parameterByAddress = lookupByAddress["0x00,0x00,0x00,0x01"];
+//    std::cout << "Parameter with address 0x00,0x00,0x00,0x01: " << parameterByAddress.getProperty("name").toString()
+//              << std::endl;
+//
+//    // Modify it directly
+//    parameterByAddress.setProperty("name", "modifiedParameter1", nullptr);
+//    std::cout << "Modified parameter name: " << parameterByAddress.getProperty("name").toString() << std::endl;
+//
+//    ValueTree modifiedParameter = lookupByAddress["0x00,0x00,0x00,0x01"];
+//    std::cout << "new valuetree get Modified parameter name: " << parameterByAddress.getProperty("name").toString()
+//              << std::endl;
 
     std::unique_ptr<juce::XmlElement> xmlElement = synthParameters.createXml();
     std::cout << xmlElement->toString() << std::endl;
+}
+
+void MidiParameters::traverseValueTree(const ValueTree &tree) {
+    // Process the current node
+    Identifier type = tree.getType();
+    std::cout << "Node type: " << type.toString() << std::endl;
+
+    // Process properties of the current node
+    for (int i = 0; i < tree.getNumProperties(); ++i) {
+        Identifier propertyName = tree.getPropertyName(i);
+        var propertyValue = tree.getProperty(propertyName);
+        std::cout << "Property name: " << propertyName.toString()
+                  << ", value: " << propertyValue.toString() << std::endl;
+    }
+
+    // Recursively process child nodes
+    for (int i = 0; i < tree.getNumChildren(); ++i) {
+        traverseValueTree(tree.getChild(i));
+    }
 }
